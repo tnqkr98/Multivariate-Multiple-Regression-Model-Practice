@@ -9,6 +9,10 @@ def make_one_file(merge_dir, individual_dir):
         df_merge = pd.read_excel(merge_dir+"/"+file)
         df_individual_sheet2 = pd.read_excel(individual_dir+"/"+file[4:], sheet_name=1)
         row_size = df_merge['csd'].size
+        df_merge = df_merge.drop(['time'], axis=1)       # 절대 시간열 제거
+        df_merge['time'] = [i for i in range(row_size)]  # 상대 시간열 추가
+
+        # column - awake/asleep
 
         # column - age
         value = df_individual_sheet2['age'][0]
@@ -26,7 +30,7 @@ def make_one_file(merge_dir, individual_dir):
         value = df_individual_sheet2['weight'][0]
         df_merge['weight'] = [value for i in range(row_size)]
 
-        # column - disease (5 Category)
+        # column - disease (5 Category) -> 처리잘해야할듯
         value = df_individual_sheet2['q5'][0]
         df_merge['disease'] = [value for i in range(row_size)]
 

@@ -33,6 +33,10 @@ y_preds = model1.predict(x_val)
 rmse = np.sqrt(mean_squared_error(y_val, y_preds))
 print(f"Model 1 - RMSE : {rmse: .4f}")
 
+# plt.plot(x_train, y_train, 'o')
+# plt.plot(x_train, model1.predict(x_train))
+# plt.show()
+
 # Decision Tree
 model2 = DecisionTreeRegressor()
 model2.fit(x_train, y_train)
@@ -48,6 +52,9 @@ y_preds = model3.predict(x_val)
 
 rmse = np.sqrt(mean_squared_error(y_val, y_preds))
 print(f"Model 3 - RMSE : {rmse: .4f}")
-
-
+print(x_val[0][0])
+print(type(x_val))
+print(f"val = {x_val[1][0]}, truth :{y_val[1][0]}, predict:{model1.predict(x_val)[1][0] }")
+print(f"val = {x_val[1][0]}, truth :{y_val[1][0]}, predict:{model2.predict(x_val)[1][0] }")
+print(f"val = {x_val[1][0]}, truth :{y_val[1][0]}, predict:{model3.predict(x_val)[1][0] }")
 # k Fold
