@@ -46,8 +46,12 @@ def PlotMultiplePie(df, categorical_features=None, dropna=False):
             print('\n')
 
 
-PlotMultiplePie(sample_data)
+# PlotMultiplePie(sample_data)
 
 sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
+sample_data = pd.get_dummies(sample_data)
 print(sample_data)
+
+
+# ToDo : Train - Test Split
 

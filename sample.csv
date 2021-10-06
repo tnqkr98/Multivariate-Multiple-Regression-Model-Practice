@@ -1,4 +1,4 @@
-,co2,temp,humid,csd,sound,time,state,age,sex,height,weight,disease,depressive,disorder,media,liquor,smoke,caffeine,exercise,stress,nap
+,co2,temp,humid,csd,sound,time,state,age,gender,height,weight,disease,depressive,disorder,media,liquor,smoke,caffeine,exercise,stress,nap
 0,7090,28.1,47.0,0,42,0,awake,29,male,175,65,0,1,no,45,0,0,189,0,1,2
 1,7050,27.9,46.4,0,43,1,awake,29,male,175,65,0,1,no,45,0,0,189,0,1,2
 2,7190,27.9,48.3,0,41,2,awake,29,male,175,65,0,1,no,45,0,0,189,0,1,2

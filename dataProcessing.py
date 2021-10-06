@@ -113,7 +113,7 @@ def make_one_file_remain_category(merge_dir, individual_dir):
 
         # column - sex (Binary)
         value = df_individual_sheet2['sex'][0]
-        df_merge['sex'] = [value for i in range(row_size)]
+        df_merge['gender'] = [value for i in range(row_size)]
 
         # column - height
         value = df_individual_sheet2['height'][0]
