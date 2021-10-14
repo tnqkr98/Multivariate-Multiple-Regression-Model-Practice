@@ -2,7 +2,14 @@ import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.ensemble import RandomForestRegressor
+from sklearn import svm
+from sklearn.linear_model import LinearRegression
+# from bayes_opt import BayesianOptimization
+import shap
 
 sample_data = pd.read_csv("sample.csv")
 print(sample_data.info(verbose=True, show_counts=True))
@@ -22,7 +29,7 @@ def PlotMultiplePie(df, categorical_features=None, dropna=False):
     threshold = 30
 
     # if user did not set categorical_features
-    if categorical_features == None:
+    if categorical_features is None:
         categorical_features = df.select_dtypes(['object', 'category']).columns.to_list()
 
     print("The Categorical Features are:", categorical_features)
@@ -46,12 +53,58 @@ def PlotMultiplePie(df, categorical_features=None, dropna=False):
             print('\n')
 
 
+def evaluateRegressor(true, predicted, message="    Test Set"):
+    MSE = mean_squared_error(true, predicted, squared=True)
+    MAE = mean_absolute_error(true, predicted)
+    RMSE = mean_squared_error(true, predicted, squared=False)
+    R_squared = r2_score(true, predicted)
+
+    print(message)
+    print("MSE :", MSE)
+    print("MAE :", MAE)
+    print("RMSE :", RMSE)
+    print("R-Squared :", R_squared)
+
+
 # PlotMultiplePie(sample_data)
 
 sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
-sample_data = pd.get_dummies(sample_data)
-print(sample_data)
+sample_data = pd.get_dummies(sample_data)                       # Embedding
+
+# Train - Test Split
+x_data = sample_data.iloc[:, 6:]
+y_data = sample_data.iloc[:, [1, 2, 3, 4, 5]]
+train_x, valid_x, train_y, valid_y = train_test_split(x_data, y_data, test_size=0.2, shuffle=True, random_state=1)
+print(train_x)
+
+# Initialize Model
+print("Random Forest Regressor")
+RFRegModel = RandomForestRegressor(random_state=0).fit(train_x, train_y)
+predict_train_y = RFRegModel.predict(train_x)
+evaluateRegressor(train_y, predict_train_y, "    Training Set")
+predict_valid_y = RFRegModel.predict(valid_x)
+evaluateRegressor(valid_y, predict_valid_y)
+print("\n")
+
+print("Linear Regression")
+LinearModel = LinearRegression().fit(train_x, train_y)
+predict_train_y = LinearModel.predict(train_x)
+evaluateRegressor(train_y, predict_train_y, "    Training Set")
+predict_valid_y = LinearModel.predict(valid_x)
+evaluateRegressor(valid_y, predict_valid_y)
 
 
-# ToDo : Train - Test Split
+"""print("Support Vector Machine")
+SVM = svm.SVR().fit(train_x, train_y)
+predicted_train_y = SVM.predict(train_x)
+evaluateRegressor(train_y, predicted_train_y, "    Training Set")
+predicted_valid_y = SVM.predict(valid_x)
+evaluateRegressor(valid_y, predicted_valid_y, "    Test Set")
+print("\n")"""
+
+
+
+
+
+
 
