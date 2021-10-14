@@ -2,12 +2,18 @@ import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import RepeatedKFold
+from sklearn.model_selection import cross_val_score
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
-from sklearn import svm
+from sklearn.svm import LinearSVR
 from sklearn.linear_model import LinearRegression
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.multioutput import MultiOutputRegressor
 # from bayes_opt import BayesianOptimization
 import shap
 
@@ -92,18 +98,25 @@ predict_train_y = LinearModel.predict(train_x)
 evaluateRegressor(train_y, predict_train_y, "    Training Set")
 predict_valid_y = LinearModel.predict(valid_x)
 evaluateRegressor(valid_y, predict_valid_y)
+print("\n")
 
+print("K-Nearest Neighbors")
+KNNModel = KNeighborsRegressor().fit(train_x, train_y)
+predict_train_y = KNNModel.predict(train_x)
+evaluateRegressor(train_y, predict_train_y, "    Training Set")
+predict_valid_y = KNNModel.predict(valid_x)
+evaluateRegressor(valid_y, predict_valid_y)
+print("\n")
 
-"""print("Support Vector Machine")
-SVM = svm.SVR().fit(train_x, train_y)
-predicted_train_y = SVM.predict(train_x)
-evaluateRegressor(train_y, predicted_train_y, "    Training Set")
-predicted_valid_y = SVM.predict(valid_x)
-evaluateRegressor(valid_y, predicted_valid_y, "    Test Set")
-print("\n")"""
+print("Decision Tree")
+DTModel = DecisionTreeRegressor().fit(train_x, train_y)
+predict_train_y = DTModel.predict(train_x)
+evaluateRegressor(train_y, predict_train_y, "    Training Set")
+predict_valid_y = DTModel.predict(valid_x)
+evaluateRegressor(valid_y, predict_valid_y)
+print("\n")
 
-
-
+# ToDo : SVR (Multioutput), K-Fold Cross Validation
 
 
 
