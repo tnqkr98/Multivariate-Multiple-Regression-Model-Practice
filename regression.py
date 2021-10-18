@@ -31,10 +31,34 @@ def remove_outliers(df, column_name, lower, upper):
     index_names = df[~removed_outliers].index
     return df.drop(index_names)
 
+"""
+ 0   time           11964 non-null  int64
+ 1   age            11964 non-null  int64
+ 2   height         11964 non-null  int64
+ 3   weight         11964 non-null  int64
+ 4   depressive     11964 non-null  int64
+ 5   media          11964 non-null  int64
+ 6   liquor         11964 non-null  int64
+ 7   smoke          11964 non-null  int64
+ 8   caffeine       11964 non-null  int64
+ 9   exercise       11964 non-null  int64
+ 10  stress         11964 non-null  int64
+ 11  nap            11964 non-null  int64
+ 12  state_asleep   11964 non-null  uint8
+ 13  state_awake    11964 non-null  uint8
+ 14  gender_female  11964 non-null  uint8
+ 15  gender_male    11964 non-null  uint8
+ 16  disease_none   11964 non-null  uint8
+ 17  disorder_no    11964 non-null  uint8
+ 18  disorder_yes   11964 non-null  uint8
+"""
+# def predictEnv():
+
 
 sample_data = pd.read_csv("sample.csv")
 sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
 sample_data = pd.get_dummies(sample_data)                       # Embedding
+sample_data.info()
 
 x_data = sample_data.iloc[:, 6:]
 y_data = sample_data.iloc[:, [1, 2, 3, 4, 5]]
@@ -73,7 +97,6 @@ optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 loss_list = []
 test_loss_list = []
 for iteration in range(iteration_number):
-
     optimizer.zero_grad()
     results = model(inputs)
     loss = mse(results, targets)
@@ -88,7 +111,23 @@ for iteration in range(iteration_number):
     if iteration % 50 == 0:
         print('epoch %3d, trian loss : %f, test loss : %f ' % (iteration, loss.data, test_loss.data))
 
+
 plt.plot(range(iteration_number), loss_list, range(iteration_number), test_loss_list)
 plt.xlabel("Number of Iterations")
 plt.ylabel("Loss")
 plt.show()
+
+
+input_x_test = torch.from_numpy(x_test_scaled)
+predicted = model(input_x_test.float()).data.numpy()
+
+predicted = sc_y.inverse_transform(predicted)
+print("%.2f" % predicted[0][0])
+print("%.2f" % predicted[0][1])
+print("%.2f" % predicted[0][2])
+print("%.2f" % predicted[0][3])
+print("%.2f" % predicted[0][4])
+print(y_test['co2'])
+
+
+
