@@ -24,7 +24,8 @@ print(sample_data.info(verbose=True, show_counts=True))
 def remove_outliers(df, column_name, lower, upper):
     removed_outliers = df[column_name].between(df[column_name].quantile(lower), df[column_name].quantile(upper))
 
-    print(str(df[column_name][removed_outliers].size) + "/" + str(sample_data[column_name].size) + " data points remain.")
+    print(
+        str(df[column_name][removed_outliers].size) + "/" + str(sample_data[column_name].size) + " data points remain.")
 
     index_names = df[~removed_outliers].index
     return df.drop(index_names)
@@ -72,10 +73,16 @@ def evaluateRegressor(true, predicted, message="    Test Set"):
     print("R-Squared :", R_squared)
 
 
+def predictBestEnv(model, time):
+    result_env = [0, 0, 0, 0, 0]
+    for i in range(time):
+        pre = model.predict()
+
+
 # PlotMultiplePie(sample_data)
 
 sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
-sample_data = pd.get_dummies(sample_data)                       # Embedding
+sample_data = pd.get_dummies(sample_data)  # Embedding
 
 # Train - Test Split
 x_data = sample_data.iloc[:, 6:]
@@ -117,7 +124,3 @@ evaluateRegressor(valid_y, predict_valid_y)
 print("\n")
 
 # ToDo : SVR (Multioutput), K-Fold Cross Validation
-
-
-
-
