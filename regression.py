@@ -6,21 +6,37 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import torch.nn.functional as F
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from torch.utils.data import DataLoader, TensorDataset, random_split
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+
+USE_CUDA = torch.cuda.is_available()
+print(USE_CUDA)
+
 torch.manual_seed(1)
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+if device == 'cuda':
+    torch.cuda.manual_seed_all(1)
+    print('cuda index:', torch.cuda.current_device())
 
 
 class LinearRegression(nn.Module):
     def __init__(self, input_size, output_size):
         super(LinearRegression,self).__init__()
-        self.linear = nn.Linear(input_dim, output_dim)
+        self.fc1 = nn.Linear(input_dim, 64)
+        self.fc2 = nn.Linear(64, 32)
+        self.fc3 = nn.Linear(32, output_dim)
 
     def forward(self, x):
-        return self.linear(x)
+        x = self.fc1(x)
+        x = F.sigmoid(x)
+        x = self.fc2(x)
+        x = F.sigmoid(x)
+        x = self.fc3(x)
+        return x
 
 
 def remove_outliers(df, column_name, lower, upper):
@@ -30,6 +46,20 @@ def remove_outliers(df, column_name, lower, upper):
 
     index_names = df[~removed_outliers].index
     return df.drop(index_names)
+
+
+def evaluateRegressor(true, predicted, message="    Test Set"):
+    MSE = mean_squared_error(true, predicted, squared=True)
+    MAE = mean_absolute_error(true, predicted)
+    RMSE = mean_squared_error(true, predicted, squared=False)
+    R_squared = r2_score(true, predicted)
+
+    print(message)
+    print("MSE :", MSE)
+    print("MAE :", MAE)
+    print("RMSE :", RMSE)
+    print("R-Squared :", R_squared)
+
 
 """
  0   time           11964 non-null  int64
@@ -56,25 +86,28 @@ def remove_outliers(df, column_name, lower, upper):
 
 
 sample_data = pd.read_csv("sample.csv")
-sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
+sample_data = remove_outliers(sample_data, "co2", 0.05, 0.95)
+idx_zero_temp = sample_data[sample_data['temp'] == 0].index
+
+sample_data = sample_data.drop(idx_zero_temp)
 sample_data = pd.get_dummies(sample_data)                       # Embedding
-sample_data.info()
+
+# sample_data.info(verbose=True, show_counts=True)
 
 x_data = sample_data.iloc[:, 6:]
 y_data = sample_data.iloc[:, [1, 2, 3, 4, 5]]
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.1, random_state=42)
-x_data.info(verbose=True, show_counts=True)
+# x_data.info(verbose=True, show_counts=True)
 
-learning_rate = 0.02
-iteration_number = 1000
+learning_rate = 0.15
+iteration_number = 3000
 
-sc_x = StandardScaler()
-x_train_scaled = sc_x.fit_transform(x_train)
-x_test_scaled = sc_x.transform(x_test)
+sc = StandardScaler()
+x_train_scaled = sc.fit_transform(x_train)
+x_test_scaled = sc.transform(x_test)
 
-sc_y = StandardScaler()
-y_train_scaled = sc_y.fit_transform(y_train)
-y_test_scaled = sc_y.transform(y_test)
+y_train_scaled = sc.fit_transform(y_train)
+y_test_scaled = sc.transform(y_test)
 
 x_train_scaled = np.array(x_train_scaled, dtype=np.float32)
 y_train_scaled = np.array(y_train_scaled, dtype=np.float32)
@@ -121,13 +154,18 @@ plt.show()
 input_x_test = torch.from_numpy(x_test_scaled)
 predicted = model(input_x_test.float()).data.numpy()
 
-predicted = sc_y.inverse_transform(predicted)
+"""predicted = sc_y.inverse_transform(predicted)
 print("%.2f" % predicted[0][0])
 print("%.2f" % predicted[0][1])
 print("%.2f" % predicted[0][2])
 print("%.2f" % predicted[0][3])
 print("%.2f" % predicted[0][4])
-print(y_test['co2'])
+# print(y_test['co2'])"""
+
+predict_valid_y = model(input_x_test.float()).data.numpy()
+evaluateRegressor(test_targets, predict_valid_y)
+predict_valid_y = sc.inverse_transform(predict_valid_y)
+evaluateRegressor(y_test, predict_valid_y,"    Valid Set")
 
 
 

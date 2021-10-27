@@ -79,12 +79,15 @@ def predictBestEnv(model, time):
         pre = model.predict()
 
 
+sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
+idx_zero_temp = sample_data[sample_data['temp'] == 0].index
+sample_data = sample_data.drop(idx_zero_temp)
+sample_data.info(verbose=True, show_counts=True)
 # PlotMultiplePie(sample_data)
 
-sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
 sample_data = pd.get_dummies(sample_data)  # Embedding
 
-# Train - Test Split
+""""# Train - Test Split
 x_data = sample_data.iloc[:, 6:]
 y_data = sample_data.iloc[:, [1, 2, 3, 4, 5]]
 train_x, valid_x, train_y, valid_y = train_test_split(x_data, y_data, test_size=0.2, shuffle=True, random_state=1)
@@ -124,3 +127,4 @@ evaluateRegressor(valid_y, predict_valid_y)
 print("\n")
 
 # ToDo : SVR (Multioutput), K-Fold Cross Validation
+"""

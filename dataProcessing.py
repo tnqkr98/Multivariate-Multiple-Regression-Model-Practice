@@ -7,7 +7,7 @@ def make_one_file_remain_category(merge_dir, individual_dir):
     merge_files = os.listdir(merge_dir)
     for file in merge_files:
         df_merge = pd.read_excel(merge_dir + "/" + file)
-        df_individual_sheet2 = pd.read_excel(individual_dir + "/" + file[4:], sheet_name=1)
+        df_individual_sheet2 = pd.read_excel(individual_dir + "/" + file[8:], sheet_name=1)
         row_size = df_merge['csd'].size
         df_merge = df_merge.drop(['time'], axis=1)  # 절대 시간열 제거
         df_merge['time'] = [i for i in range(row_size)]  # 상대 시간열 추가
@@ -38,7 +38,7 @@ def make_one_file_remain_category(merge_dir, individual_dir):
         value = df_individual_sheet2['weight'][0]
         df_merge['weight'] = [value for i in range(row_size)]
 
-        # column - disease (5 Category) -> 처리잘해야할듯
+        # column - disease (5 Category) -> 처리잘해야할듯 (다중 선택을 최초선택한 하나만으로 설정)
         value = df_individual_sheet2['q5'][0]
         value = str(value)[0]
         if value == '0':
