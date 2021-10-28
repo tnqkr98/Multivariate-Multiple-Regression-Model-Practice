@@ -102,7 +102,7 @@ def make_one_file_remain_category(merge_dir, individual_dir):
 
 
 result = make_one_file_remain_category("sleep_merge", "sleep_individual")
-result.to_csv('sample.csv')
+result.to_csv('sample.csv', index=False)
 
 ##df_sheet = pd.read_excel("sleep_merge/new_2107200321_박동한_1626744303108.xls", sheet_name=0)
 ##df_sheet1 = pd.read_excel("sleep_merge/new_2107210354_박동한_1626826441567.xls", sheet_name=0)

@@ -18,7 +18,7 @@ from sklearn.multioutput import MultiOutputRegressor
 import shap
 
 sample_data = pd.read_csv("sample.csv")
-print(sample_data.info(verbose=True, show_counts=True))
+# print(sample_data.info(verbose=True, show_counts=True))
 
 
 def remove_outliers(df, column_name, lower, upper):
@@ -79,21 +79,29 @@ def predictBestEnv(model, time):
         pre = model.predict()
 
 
-sample_data = remove_outliers(sample_data, "co2", 0.1, 0.9)
+# sns.countplot(sample_data['age'])
+
+sample_data = remove_outliers(sample_data, "co2", 0.05, 0.95)
 idx_zero_temp = sample_data[sample_data['temp'] == 0].index
 sample_data = sample_data.drop(idx_zero_temp)
+# sample_data = sample_data.drop('Unnamed: 0', axis=1)
+# sample_data = sample_data.style.hide_index()
 sample_data.info(verbose=True, show_counts=True)
 # PlotMultiplePie(sample_data)
 
 sample_data = pd.get_dummies(sample_data)  # Embedding
+print(sample_data.head())
 
-""""# Train - Test Split
+
+# sample_data.to_csv('dummy.csv')
+
+# Train - Test Split
 x_data = sample_data.iloc[:, 6:]
 y_data = sample_data.iloc[:, [1, 2, 3, 4, 5]]
 train_x, valid_x, train_y, valid_y = train_test_split(x_data, y_data, test_size=0.2, shuffle=True, random_state=1)
-print(train_x)
+# print(train_x)
 
-# Initialize Model
+""""# Initialize Model
 print("Random Forest Regressor")
 RFRegModel = RandomForestRegressor(random_state=0).fit(train_x, train_y)
 predict_train_y = RFRegModel.predict(train_x)
