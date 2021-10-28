@@ -81,13 +81,14 @@ def predictBestEnv(model, time):
 
 # sns.countplot(sample_data['age'])
 
+PlotMultiplePie(sample_data)
 sample_data = remove_outliers(sample_data, "co2", 0.05, 0.95)
 idx_zero_temp = sample_data[sample_data['temp'] == 0].index
 sample_data = sample_data.drop(idx_zero_temp)
 # sample_data = sample_data.drop('Unnamed: 0', axis=1)
 # sample_data = sample_data.style.hide_index()
 sample_data.info(verbose=True, show_counts=True)
-# PlotMultiplePie(sample_data)
+
 
 sample_data = pd.get_dummies(sample_data)  # Embedding
 print(sample_data.head())
