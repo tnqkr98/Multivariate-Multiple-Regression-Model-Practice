@@ -1,5 +1,4 @@
 import torch
-import jovian
 import torchvision
 import torch.nn as nn
 import pandas as pd
@@ -11,6 +10,7 @@ from torch.utils.data import DataLoader, TensorDataset, random_split
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MaxAbsScaler
 
 
 USE_CUDA = torch.cuda.is_available()
@@ -26,9 +26,9 @@ if device == 'cuda':
 class LinearRegression(nn.Module):
     def __init__(self, input_size, output_size):
         super(LinearRegression,self).__init__()
-        self.fc1 = nn.Linear(input_dim, 64)
+        self.fc1 = nn.Linear(input_size, 64)
         self.fc2 = nn.Linear(64, 32)
-        self.fc3 = nn.Linear(32, output_dim)
+        self.fc3 = nn.Linear(32, output_size)
 
     def forward(self, x):
         x = self.fc1(x)
@@ -91,6 +91,7 @@ idx_zero_temp = sample_data[sample_data['temp'] == 0].index
 
 sample_data = sample_data.drop(idx_zero_temp)
 sample_data = pd.get_dummies(sample_data)                       # Embedding
+sample_data.to_csv('dummy.csv', index=False)
 
 # sample_data.info(verbose=True, show_counts=True)
 
@@ -100,7 +101,7 @@ x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.
 # x_data.info(verbose=True, show_counts=True)
 
 learning_rate = 0.15
-iteration_number = 3000
+iteration_number = 12000
 
 sc = StandardScaler()
 x_train_scaled = sc.fit_transform(x_train)
@@ -154,13 +155,13 @@ plt.show()
 input_x_test = torch.from_numpy(x_test_scaled)
 predicted = model(input_x_test.float()).data.numpy()
 
-"""predicted = sc_y.inverse_transform(predicted)
+"""predicted = sc.inverse_transform(predicted)
 print("%.2f" % predicted[0][0])
 print("%.2f" % predicted[0][1])
 print("%.2f" % predicted[0][2])
 print("%.2f" % predicted[0][3])
-print("%.2f" % predicted[0][4])
-# print(y_test['co2'])"""
+print("%.2f" % predicted[0][4])"""
+# print(y_test['co2'])
 
 predict_valid_y = model(input_x_test.float()).data.numpy()
 evaluateRegressor(test_targets, predict_valid_y)
