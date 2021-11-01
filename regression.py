@@ -88,17 +88,19 @@ def evaluateRegressor(true, predicted, message="    Test Set"):
 sample_data = pd.read_csv("sample.csv")
 sample_data = remove_outliers(sample_data, "co2", 0.05, 0.95)
 idx_zero_temp = sample_data[sample_data['temp'] == 0].index
-
 sample_data = sample_data.drop(idx_zero_temp)
 sample_data = pd.get_dummies(sample_data)                       # Embedding
-sample_data.to_csv('dummy.csv', index=False)
+# sample_data.to_csv('dummy.csv', index=False)
 
 # sample_data.info(verbose=True, show_counts=True)
 
-x_data = sample_data.iloc[:, 6:]
-y_data = sample_data.iloc[:, [1, 2, 3, 4, 5]]
+x_data = sample_data.iloc[:, 5:]
+y_data = sample_data.iloc[:, [0, 1, 2, 3, 4]]
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.1, random_state=42)
 # x_data.info(verbose=True, show_counts=True)
+
+# print(x_data)
+# print(y_data)
 
 learning_rate = 0.15
 iteration_number = 12000
@@ -128,7 +130,7 @@ model = LinearRegression(input_dim, output_dim)
 mse = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-loss_list = []
+"""loss_list = []
 test_loss_list = []
 for iteration in range(iteration_number):
     optimizer.zero_grad()
@@ -153,7 +155,7 @@ plt.show()
 
 
 input_x_test = torch.from_numpy(x_test_scaled)
-predicted = model(input_x_test.float()).data.numpy()
+predicted = model(input_x_test.float()).data.numpy()"""
 
 """predicted = sc.inverse_transform(predicted)
 print("%.2f" % predicted[0][0])
@@ -163,10 +165,10 @@ print("%.2f" % predicted[0][3])
 print("%.2f" % predicted[0][4])"""
 # print(y_test['co2'])
 
-predict_valid_y = model(input_x_test.float()).data.numpy()
+"""predict_valid_y = model(input_x_test.float()).data.numpy()
 evaluateRegressor(test_targets, predict_valid_y)
 predict_valid_y = sc.inverse_transform(predict_valid_y)
-evaluateRegressor(y_test, predict_valid_y,"    Valid Set")
+evaluateRegressor(y_test, predict_valid_y,"    Valid Set")"""
 
 
 

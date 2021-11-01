@@ -10,7 +10,7 @@ def make_one_file_remain_category(merge_dir, individual_dir):
         df_individual_sheet2 = pd.read_excel(individual_dir + "/" + file[8:], sheet_name=1)
         row_size = df_merge['csd'].size
         df_merge = df_merge.drop(['time'], axis=1)  # 절대 시간열 제거
-        df_merge['time'] = [i for i in range(row_size)]  # 상대 시간열 추가
+        # df_merge['time'] = [i for i in range(row_size)]  # 상대 시간열 추가
 
         # column - awake & asleep
         val_list = list()
