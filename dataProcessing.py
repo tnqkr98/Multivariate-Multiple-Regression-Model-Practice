@@ -93,8 +93,9 @@ def make_one_file_remain_category(merge_dir, individual_dir):
         df_merge['stress'] = [value for i in range(row_size)]
 
         # column - nap (Binary)
-        value = df_individual_sheet2['dq6'][0]
-        df_merge['nap'] = [value for i in range(row_size)]
+        val = "yes" if df_individual_sheet2['dq6'][0] == 1 else "no"
+        df_merge['nap'] = [val for i in range(row_size)]
+
         resultfile = pd.concat([resultfile, df_merge])
 
     print(resultfile)
