@@ -1,0 +1,12 @@
+co2,temp,humid,csd,sound,state,age,gender,height,weight,disease,depressive,disorder,media,liquor,smoke,caffeine,exercise,stress,nap
+1780,28.1,51.7,0,38,awake,29,male,171,65,none,0,no,90,0,0,189,15,2,no
+420,29,54.7,0,47,awake,28,male,170,70,none,0,yes,90,0,0,0,45,1,no
+1060,30.5,64.9,8,41,awake,28,male,172,67,none,0,no,45,0,0,189,0,1,no
+1380,24.3,58.5,0,54,awake,29,male,175,65,none,0,no,45,0,0,189,0,4,no
+2220,27.7,57.2,0,51,awake,27,male,175,75,none,0,no,90,0,0,189,45,0,no
+1440,28.1,67,0,30,awake,29,female,168,62,none,1,no,45,14,0,189,0,1,no
+1330,26.4,69.9,0,32,asleep,26,female,146,50,mental,3,no,210,14,0,0,15,3,no
+1030,26.2,65.2,0,42,asleep,30,male,174,83,none,0,yes,45,0,0,0,45,0,no
+2770,25.5,68.8,0,30,awake,31,female,161,63,none,1,yes,150,0,0,0,0,3,no
+2540,25.1,74.2,254,45,awake,28,male,164,76,none,0,no,150,0,22,189,0,4,yes
+1000,10.1,10.1,100,100,awake,10,male,100,10,hypertensive,1,no,100,10,10,10,10,1,yes

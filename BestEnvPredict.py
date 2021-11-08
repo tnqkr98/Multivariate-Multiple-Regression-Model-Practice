@@ -77,10 +77,16 @@ def evaluateRegressor(true, predicted, message="    Test Set"):
     print("R-Squared :", R_squared)
 
 
-def predictBestEnv(model, time):
-    result_env = [0, 0, 0, 0, 0]
-    for i in range(time):
-        pre = model.predict()
+def predictEnvironment():
+    people_data = pd.read_csv("real_validation.csv")
+    print(" -- Input Raw Data -- ")
+    print(people_data.iloc[:, 5:])
+
+    input_raw_data = pd.get_dummies(people_data)  # 임베딩
+    input_raw_data = input_raw_data.iloc[:, 5:]  # 환경 데이터 제거
+    input_raw_data.to_csv('real_input.csv', index=False)
+    scaler = MinMaxScaler()  # Scale Method
+    input_data = scaler.fit_transform(input_raw_data)  # 입력 값 설정
 
 
 # sns.countplot(sample_data['age'])
@@ -90,6 +96,10 @@ sample_data = pd.read_csv("sample.csv")
 sample_data = remove_outliers(sample_data, "co2", 0.05, 0.95)
 idx_zero_temp = sample_data[sample_data['temp'] == 0].index
 sample_data = sample_data.drop(idx_zero_temp)
+idx_zero_temp = sample_data[sample_data['stress'] == -1].index
+sample_data = sample_data.drop(idx_zero_temp)
+# sample_data.info(verbose=True, show_counts=True)
+
 sample_data = pd.get_dummies(sample_data)                       # Embedding
 
 x_data = sample_data.iloc[:, 5:]
@@ -97,6 +107,8 @@ y_data = sample_data.iloc[:, [0, 1, 2, 3, 4]]
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size=0.1, random_state=42)
 
 print(x_data.shape)
+x_data.to_csv('x_data.csv', index=False)
+
 
 sc = MaxAbsScaler()
 x_train_scaled = sc.fit_transform(x_train)
@@ -130,6 +142,8 @@ predict_valid_y = sc.inverse_transform(predict_valid_y)
 evaluateRegressor(y_test, predict_valid_y, "     Valid Set")
 print("\n")
 
+
+predictEnvironment()
 
 
 """print("Linear Regression")

@@ -61,6 +61,9 @@ def evaluateRegressor(true, predicted, message="    Test Set"):
     print("R-Squared :", R_squared)
 
 
+# def rndValidPredict():
+
+
 """
  0   time           11964 non-null  int64
  1   age            11964 non-null  int64
@@ -130,7 +133,7 @@ model = LinearRegression(input_dim, output_dim)
 mse = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-"""loss_list = []
+loss_list = []
 test_loss_list = []
 for iteration in range(iteration_number):
     optimizer.zero_grad()
@@ -169,7 +172,7 @@ predict_valid_y = model(input_x_test.float()).data.numpy()
 evaluateRegressor(test_targets, predict_valid_y)
 predict_valid_y = sc.inverse_transform(predict_valid_y)
 evaluateRegressor(y_test, predict_valid_y,"    Valid Set")
-"""
+
 
 
 
